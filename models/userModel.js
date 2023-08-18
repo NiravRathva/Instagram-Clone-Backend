@@ -31,20 +31,34 @@ const userSchema = new mongoose.Schema(
     },
     profileImage: {
       type: String,
+      default: "",
     },
 
     bio: {
       type: String,
       default: "",
     },
-    followers:{
-      type: mongoose.Schema.ObjectId,
-      ref: "User",
-    },
-    following:{
-      type: mongoose.Schema.ObjectId,
-      ref: "User",
-    },
+    followers: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+        default: [],
+      },
+    ],
+    following: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+        default: [],
+      },
+    ],
+    post: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Post",
+        default: [],
+      },
+    ],
   },
   {
     timestamps: true,

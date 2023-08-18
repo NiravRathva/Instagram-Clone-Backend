@@ -17,6 +17,11 @@ export const signUp = catchAsync(async (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     gender: req.body.gender,
+    profileImage:req.body.profileImage,
+    bio:req.body.bio,
+    followers:req.body.followers,
+    following:req.body.following,
+    post:req.body.post
   });
   //generate JSON web token
   const token = signToken(newUser._id);
