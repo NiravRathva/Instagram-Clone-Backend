@@ -1,12 +1,20 @@
 import express from "express";
 import {
-  getAllPosts,
+  getFollowingPosts,
   createPost,
   deletePost,
-  getPost,
+  getRandomPost,
 } from "../controllers/postController.js";
+import { verifyToken } from "../controllers/authController.js";
 const router = express.Router();
 
-router.route("/").get(getAllPosts).post(createPost);
-router.route("/:id").delete(deletePost).get(getPost);
+router
+  .route("/")
+  .get(verifyToken, getFollowingPosts)
+  .get(verifyToken, getRandomPost)
+  .post(verifyToken, createPost);
+
+router.route("/:id").delete(verifyToken, deletePost);
+router.get("/random", verifyToken, getRandomPost);
+
 export default router;

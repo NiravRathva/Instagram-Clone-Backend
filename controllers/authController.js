@@ -2,7 +2,7 @@ import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import { catchAsync } from "../utils/catchAsync.js";
 import { appError } from "../utils/appError.js";
-import {promisify} from "util"
+import { promisify } from "util";
 //sign token
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
@@ -55,11 +55,12 @@ export const signIn = catchAsync(async (req, res, next) => {
 export const verifyToken = catchAsync(async (req, res, next) => {
   let token;
 
-  // checking for the token
+  // Check for the presence of the token in the Authorization header
   if (
     req.get("authorization") &&
     req.get("authorization").startsWith("Bearer")
   ) {
+    // Extract the token from the Authorization header
     token = req.get("authorization").split(" ")[1];
   }
   if (!token) {
@@ -68,15 +69,17 @@ export const verifyToken = catchAsync(async (req, res, next) => {
       401
     );
   }
-  // verify token
+  // Verify the token using JWT.verify
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-
+  // Find the user associated with the decoded token
   const currentUser = await User.findById(decoded.id);
+  // If no user is found, return a 401 Unauthorized error
   if (!currentUser) {
     return next(
       new appError("User belonging to this token does not exist ", 401)
     );
   }
+  // Attach the user object to the request for use in subsequent middleware
   req.user = currentUser;
   next();
 });

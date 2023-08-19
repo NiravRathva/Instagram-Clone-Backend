@@ -7,7 +7,7 @@ export const deleteOne = (Model) =>
     if (!doc) {
       return next(new appError("No document found with that ID", 404));
     }
-    res.status(200).json({
+    res.status(204).json({
       status: "success",
       data: null,
     });
