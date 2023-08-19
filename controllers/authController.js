@@ -2,7 +2,7 @@ import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import { catchAsync } from "../utils/catchAsync.js";
 import { appError } from "../utils/appError.js";
-
+import {promisify} from "util"
 //sign token
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
@@ -17,11 +17,11 @@ export const signUp = catchAsync(async (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     gender: req.body.gender,
-    profileImage:req.body.profileImage,
-    bio:req.body.bio,
-    followers:req.body.followers,
-    following:req.body.following,
-    post:req.body.post
+    profileImage: req.body.profileImage,
+    bio: req.body.bio,
+    followers: req.body.followers,
+    following: req.body.following,
+    post: req.body.post,
   });
   //generate JSON web token
   const token = signToken(newUser._id);
@@ -50,4 +50,33 @@ export const signIn = catchAsync(async (req, res, next) => {
   const token = signToken(user._id);
   //sending response
   res.status(200).json({ status: "success", token });
+});
+
+export const verifyToken = catchAsync(async (req, res, next) => {
+  let token;
+
+  // checking for the token
+  if (
+    req.get("authorization") &&
+    req.get("authorization").startsWith("Bearer")
+  ) {
+    token = req.get("authorization").split(" ")[1];
+  }
+  if (!token) {
+    return next(
+      new appError("you are not logged in please login to get access"),
+      401
+    );
+  }
+  // verify token
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+  const currentUser = await User.findById(decoded.id);
+  if (!currentUser) {
+    return next(
+      new appError("User belonging to this token does not exist ", 401)
+    );
+  }
+  req.user = currentUser;
+  next();
 });
