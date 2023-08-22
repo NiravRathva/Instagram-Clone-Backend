@@ -42,14 +42,15 @@ export const signIn = catchAsync(async (req, res, next) => {
     "+password"
   );
 
-  // const correct = await user.correctPassword(req.body.password, user.password);
+  const correct = await user.correctPassword(req.body.password, user.password);
   if (!user || !(await user.correctPassword(password, user.password))) {
-    next(new appError("wrong Credentials", 401));
+    return next(new appError("wrong Credentials", 401));
   }
 
   const token = signToken(user._id);
+  user.password = undefined;
   //sending response
-  res.status(200).json({ status: "success", token });
+  res.status(200).json({ status: "success", token, user });
 });
 
 export const verifyToken = catchAsync(async (req, res, next) => {
