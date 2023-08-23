@@ -48,9 +48,7 @@ export const getOne = (Model) =>
       return next(new appError("No document found with that ID", 404));
     }
     res.status(200).json({
-      status: "success",
-      result: doc.length,
-      data: doc,
+     doc,
     });
   });
 

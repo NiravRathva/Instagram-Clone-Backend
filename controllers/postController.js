@@ -58,3 +58,6 @@ export const getRandomPost = catchAsync(async (req, res) => {
   // Respond with the array of randomly selected posts
   res.status(200).json(posts);
 });
+
+// get single post 
+export const getPost =getOne(Post)

@@ -34,7 +34,9 @@ export const signIn = catchAsync(async (req, res, next) => {
   const { email, userName, password } = req.body;
   //check if email or userName and password if exist
   if (!(email || userName) || !password) {
-    next(new appError("please provide email or userName and password", 400));
+    return next(
+      new appError("please provide email or userName and password", 400)
+    );
   }
 
   // check if the user exits
@@ -50,7 +52,7 @@ export const signIn = catchAsync(async (req, res, next) => {
   const token = signToken(user._id);
   user.password = undefined;
   //sending response
-  res.status(200).json({ status: "success", token, user });
+  res.status(200).json({  user,token });
 });
 
 export const verifyToken = catchAsync(async (req, res, next) => {

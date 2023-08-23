@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors"
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import postRoutes from "./routes/postRoutes.js";
@@ -21,6 +22,7 @@ app.listen(port, () => {
 });
 
 app.use(express.json());
+app.use(cors())
 //routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
