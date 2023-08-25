@@ -3,6 +3,10 @@ import jwt from "jsonwebtoken";
 import { catchAsync } from "../utils/catchAsync.js";
 import { appError } from "../utils/appError.js";
 import { promisify } from "util";
+import dotenv from "dotenv";
+dotenv.config();
+
+const firebaseApiKey = process.env.FIREBASE_API_KEY;
 //sign token
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
@@ -52,7 +56,7 @@ export const signIn = catchAsync(async (req, res, next) => {
   const token = signToken(user._id);
   user.password = undefined;
   //sending response
-  res.status(200).json({  user,token });
+  res.status(200).json({ user, token, firebaseApiKey });
 });
 
 export const verifyToken = catchAsync(async (req, res, next) => {

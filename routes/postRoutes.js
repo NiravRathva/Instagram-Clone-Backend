@@ -12,10 +12,9 @@ const router = express.Router();
 router
   .route("/")
   .get(verifyToken, getFollowingPosts)
-  .get(verifyToken, getRandomPost)
   .post(verifyToken, createPost);
 
-router.route("/:id").delete(verifyToken, deletePost).get(verifyToken,getPost);
 router.get("/random", verifyToken, getRandomPost);
+router.route("/:id").delete(verifyToken, deletePost).get(verifyToken, getPost);
 
 export default router;
