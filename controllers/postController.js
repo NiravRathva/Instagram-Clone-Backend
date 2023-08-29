@@ -55,9 +55,8 @@ export const getRandomPost = catchAsync(async (req, res) => {
   // Use the $sample aggregation to get a random sample of 25 posts
   const posts = await Post.aggregate([{ $sample: { size: 25 } }]);
 
-  console.log("sdfsd");
   // Respond with the array of randomly selected posts
-  res.status(200).json(posts);
+  res.status(200).json(posts.sort((a, b) => b.createdAt - a.createdAt));
 });
 
 // get single post

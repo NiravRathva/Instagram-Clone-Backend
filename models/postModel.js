@@ -29,7 +29,7 @@ postSchema.pre('save', async function (next) {
 
     if (user) {
       // pushing post id into user's post field
-      user.post.push(this._id);
+      user.posts.push(this._id);
       await user.save();
     }
     next();
